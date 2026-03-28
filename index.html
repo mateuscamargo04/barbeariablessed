@@ -1,0 +1,500 @@
+Blessedbarbershop · HTML
+Copiar
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blessed Barbershop | Matão SP</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@100;200;300;400;500;600;700;900&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --white:#F5F5F0;
+  --off-white:#E8E8E0;
+  --light:#C8C8C0;
+  --mid:#888;
+  --dark:#1A1A1A;
+  --darker:#0D0D0D;
+  --black:#050505;
+  --accent:#F5F5F0;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Montserrat',sans-serif;overflow-x:hidden;cursor:none}
+ 
+/* CURSOR */
+.cursor{position:fixed;width:6px;height:6px;background:var(--white);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.2s,height 0.2s,background 0.2s;mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(245,245,240,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.12s ease;mix-blend-mode:difference}
+.cursor.big{width:50px;height:50px;background:rgba(245,245,240,0.1)}
+ 
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:9000;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1s,visibility 1s}
+#loader.gone{opacity:0;visibility:hidden}
+.loader-word{font-family:'Anton',sans-serif;font-size:6rem;letter-spacing:20px;text-transform:uppercase;overflow:hidden;line-height:1}
+.loader-word span{display:inline-block;animation:slideUp 0.8s cubic-bezier(0.16,1,0.3,1) both}
+.loader-word span:nth-child(1){animation-delay:0.1s}
+.loader-word span:nth-child(2){animation-delay:0.2s}
+.loader-word span:nth-child(3){animation-delay:0.3s}
+.loader-word span:nth-child(4){animation-delay:0.4s}
+.loader-word span:nth-child(5){animation-delay:0.5s}
+.loader-word span:nth-child(6){animation-delay:0.6s}
+.loader-word span:nth-child(7){animation-delay:0.7s}
+.loader-sub{font-size:0.6rem;letter-spacing:10px;text-transform:uppercase;color:var(--mid);margin-top:1rem;opacity:0;animation:fadeIn 0.5s 1s ease forwards}
+.loader-progress{width:0;height:1px;background:var(--white);margin-top:3rem;animation:progress 1.8s ease forwards}
+@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes progress{to{width:300px}}
+ 
+/* NOISE TEXTURE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:0.4}
+ 
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:2rem 5vw;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference;transition:padding 0.4s}
+nav.scrolled{padding:1.2rem 5vw;background:rgba(5,5,5,0.92);backdrop-filter:blur(20px);mix-blend-mode:normal;border-bottom:1px solid rgba(245,245,240,0.06)}
+.nav-logo{font-family:'Anton',sans-serif;font-size:1.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--white)}
+.nav-links{display:flex;gap:3rem;list-style:none}
+.nav-links a{color:rgba(245,245,240,0.5);text-decoration:none;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;font-weight:600;transition:color 0.3s}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{border:1px solid rgba(245,245,240,0.3);color:var(--white);padding:0.7rem 2rem;text-decoration:none;font-size:0.65rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;transition:all 0.3s}
+.nav-cta:hover{background:var(--white);color:var(--black)}
+ 
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:10rem 4vw 6rem 8vw;position:relative;z-index:2}
+.hero-right{position:relative;overflow:hidden}
+.hero-right-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=900&q=80') center/cover;filter:grayscale(100%) contrast(1.3);opacity:0.5;transition:transform 8s ease}
+.hero-right-img:hover{transform:scale(1.05)}
+.hero-right-overlay{position:absolute;inset:0;background:linear-gradient(to right,var(--black),transparent)}
+.hero-tag{font-size:0.6rem;letter-spacing:8px;text-transform:uppercase;color:var(--mid);margin-bottom:2rem;display:flex;align-items:center;gap:1.5rem;opacity:0;animation:fadeUp 1s 2.2s ease forwards}
+.hero-tag::before{content:'';width:30px;height:1px;background:var(--white)}
+.hero-title{font-family:'Anton',sans-serif;font-size:clamp(4rem,9vw,8rem);text-transform:uppercase;line-height:0.9;letter-spacing:2px;margin-bottom:2rem;opacity:0;animation:fadeUp 1s 2.4s ease forwards}
+.hero-title .stroke{-webkit-text-stroke:1px var(--white);color:transparent}
+.hero-script{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.5rem,3vw,2.5rem);color:var(--light);margin-bottom:0.5rem;display:block}
+.hero-body{font-size:0.9rem;font-weight:300;line-height:2;color:var(--mid);max-width:400px;margin-bottom:3rem;opacity:0;animation:fadeUp 1s 2.6s ease forwards;letter-spacing:1px}
+.hero-btns{display:flex;gap:1.5rem;opacity:0;animation:fadeUp 1s 2.8s ease forwards;flex-wrap:wrap}
+.btn-fill{background:var(--white);color:var(--black);padding:1.1rem 3rem;text-decoration:none;font-size:0.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;transition:all 0.3s;position:relative;overflow:hidden}
+.btn-fill::before{content:'';position:absolute;inset:0;background:var(--off-white);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;z-index:-1}
+.btn-fill:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(245,245,240,0.15)}
+.btn-ghost{border:1px solid rgba(245,245,240,0.25);color:var(--white);padding:1.1rem 3rem;text-decoration:none;font-size:0.7rem;font-weight:400;letter-spacing:4px;text-transform:uppercase;transition:all 0.3s}
+.btn-ghost:hover{border-color:var(--white);transform:translateY(-3px)}
+.hero-counter{position:absolute;bottom:3rem;right:3rem;text-align:right;z-index:2;opacity:0;animation:fadeUp 1s 3s ease forwards}
+.counter-num{font-family:'Anton',sans-serif;font-size:5rem;color:rgba(245,245,240,0.08);line-height:1;letter-spacing:4px}
+.counter-label{font-size:0.6rem;letter-spacing:5px;text-transform:uppercase;color:var(--mid)}
+ 
+/* MARQUEE */
+.marquee-wrap{border-top:1px solid rgba(245,245,240,0.08);border-bottom:1px solid rgba(245,245,240,0.08);padding:1.2rem 0;overflow:hidden;position:relative;z-index:2}
+.marquee-inner{display:inline-flex;animation:marquee 30s linear infinite;white-space:nowrap}
+.marquee-item{font-family:'Anton',sans-serif;font-size:0.85rem;letter-spacing:8px;text-transform:uppercase;color:rgba(245,245,240,0.25);padding:0 4rem;display:flex;align-items:center;gap:4rem}
+.marquee-item.accent{color:rgba(245,245,240,0.8)}
+.marquee-item::after{content:'✦';font-size:0.5rem;opacity:0.3}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+ 
+/* SECTIONS */
+.section{padding:9rem 8vw;position:relative;z-index:2}
+.section-max{max-width:1200px;margin:0 auto}
+.reveal{opacity:0;transform:translateY(50px);transition:opacity 1s ease,transform 1s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-50px);transition:opacity 1s ease,transform 1s ease}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.tag{font-size:0.6rem;letter-spacing:8px;text-transform:uppercase;color:var(--mid);margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem}
+.tag::before{content:'';width:30px;height:1px;background:var(--mid)}
+.section-title{font-family:'Anton',sans-serif;font-size:clamp(3rem,7vw,7rem);text-transform:uppercase;letter-spacing:2px;line-height:0.9;margin-bottom:3rem}
+.section-title .stroke{-webkit-text-stroke:1px rgba(245,245,240,0.3);color:transparent}
+ 
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:center}
+.about-img-wrap{position:relative}
+.about-img{width:100%;aspect-ratio:4/5;object-fit:cover;filter:grayscale(100%) contrast(1.2);display:block}
+.about-lines{position:absolute;top:-2rem;right:-2rem;bottom:2rem;left:2rem;border:1px solid rgba(245,245,240,0.1);z-index:-1}
+.about-num{position:absolute;bottom:-3rem;right:-3rem;font-family:'Anton',sans-serif;font-size:10rem;color:rgba(245,245,240,0.04);line-height:1;z-index:-1}
+.about-text p{font-size:1rem;font-weight:300;line-height:2.2;color:var(--mid);margin-bottom:1.5rem}
+.about-pills{display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:2rem}
+.pill{border:1px solid rgba(245,245,240,0.15);padding:0.6rem 1.5rem;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;font-weight:600;transition:all 0.3s}
+.pill:hover{background:var(--white);color:var(--black);border-color:var(--white)}
+ 
+/* SERVICES */
+.services-dark{background:var(--darker)}
+.services-list{margin-top:5rem}
+.service-row{display:grid;grid-template-columns:auto 1fr auto;gap:3rem;align-items:center;padding:2.5rem 0;border-bottom:1px solid rgba(245,245,240,0.06);cursor:default;transition:all 0.4s;position:relative;overflow:hidden}
+.service-row::before{content:'';position:absolute;inset:0;background:rgba(245,245,240,0.03);transform:scaleX(0);transform-origin:left;transition:transform 0.4s}
+.service-row:hover::before{transform:scaleX(1)}
+.service-row:hover .s-name{letter-spacing:8px}
+.service-row:hover .s-arrow{transform:translateX(8px)}
+.s-index{font-family:'Anton',sans-serif;font-size:1rem;color:rgba(245,245,240,0.15);letter-spacing:2px;min-width:40px}
+.s-name{font-family:'Anton',sans-serif;font-size:clamp(1.5rem,4vw,3rem);text-transform:uppercase;letter-spacing:4px;transition:letter-spacing 0.4s}
+.s-desc{font-size:0.75rem;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin-top:0.5rem;font-weight:300}
+.s-arrow{font-size:1.5rem;color:var(--mid);transition:transform 0.4s;opacity:0.4}
+ 
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:5rem}
+.stat-box{background:var(--darker);padding:3rem 2rem;text-align:center;transition:background 0.3s}
+.stat-box:hover{background:var(--dark)}
+.stat-num{font-family:'Anton',sans-serif;font-size:4rem;letter-spacing:2px;line-height:1}
+.stat-label{font-size:0.6rem;letter-spacing:5px;text-transform:uppercase;color:var(--mid);margin-top:0.75rem}
+ 
+/* BOOKING */
+.booking-section{background:var(--white);color:var(--black);padding:9rem 8vw}
+.booking-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:center}
+.booking-title{font-family:'Anton',sans-serif;font-size:clamp(3rem,7vw,6rem);text-transform:uppercase;letter-spacing:2px;line-height:0.9;color:var(--black)}
+.booking-title .gray{color:rgba(0,0,0,0.2)}
+.booking-text p{font-size:1rem;font-weight:300;line-height:2;color:rgba(0,0,0,0.5);margin-bottom:2rem}
+.btn-black{background:var(--black);color:var(--white);padding:1.2rem 3rem;text-decoration:none;font-size:0.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;transition:all 0.3s;display:inline-block}
+.btn-black:hover{background:#1a1a1a;transform:translateY(-3px);box-shadow:0 15px 40px rgba(0,0,0,0.3)}
+.booking-link{font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-top:1rem;display:block;text-decoration:none;transition:color 0.3s}
+.booking-link:hover{color:var(--black)}
+ 
+/* HORÁRIOS */
+.hours-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;margin-top:5rem}
+.hour-item{display:flex;justify-content:space-between;align-items:center;padding:1.8rem 0;border-bottom:1px solid rgba(245,245,240,0.06);transition:padding 0.3s}
+.hour-item:hover,.hour-item.today{padding-left:1rem;border-bottom-color:rgba(245,245,240,0.2)}
+.h-day{font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--mid);font-weight:500}
+.h-time{font-family:'Anton',sans-serif;font-size:1.1rem;letter-spacing:3px}
+.h-closed{font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(245,245,240,0.2)}
+.live-time{font-family:'Anton',sans-serif;font-size:6rem;letter-spacing:4px;line-height:1;opacity:0.08;margin-bottom:2rem}
+.status-pill{display:inline-flex;align-items:center;gap:0.6rem;border:1px solid rgba(245,245,240,0.15);padding:0.6rem 1.5rem;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:2rem}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--white);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+ 
+/* LOCATION */
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:5rem;align-items:start}
+.contact-list{display:flex;flex-direction:column;gap:2rem}
+.contact-item{}
+.c-label{font-size:0.6rem;letter-spacing:5px;text-transform:uppercase;color:rgba(245,245,240,0.3);margin-bottom:0.5rem}
+.c-val{font-size:1rem;font-weight:300;color:var(--white);line-height:1.6}
+.map-box{border:1px solid rgba(245,245,240,0.08);overflow:hidden;height:100%;min-height:420px}
+.map-box iframe{width:100%;height:100%;min-height:420px;border:none;filter:grayscale(100%) contrast(1.3) invert(1);opacity:0.6}
+ 
+/* FOOTER */
+footer{background:var(--black);border-top:1px solid rgba(245,245,240,0.06);padding:5rem 8vw 3rem;position:relative;z-index:2}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4rem;flex-wrap:wrap;gap:2rem}
+.footer-logo{font-family:'Anton',sans-serif;font-size:3rem;letter-spacing:6px;text-transform:uppercase;color:rgba(245,245,240,0.08);line-height:1}
+.footer-logo span{display:block;font-size:1.5rem;letter-spacing:4px}
+.footer-nav{list-style:none;display:flex;flex-direction:column;gap:1rem}
+.footer-nav a{color:rgba(245,245,240,0.3);text-decoration:none;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;transition:color 0.3s}
+.footer-nav a:hover{color:var(--white)}
+.footer-bottom{border-top:1px solid rgba(245,245,240,0.06);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(245,245,240,0.2)}
+ 
+/* WA FLOAT */
+.wa-float{position:fixed;bottom:2rem;right:2rem;z-index:500;background:var(--white);color:var(--black);padding:1rem 1.8rem;text-decoration:none;font-size:0.65rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;transition:all 0.3s;display:flex;align-items:center;gap:0.75rem;box-shadow:0 8px 40px rgba(0,0,0,0.6)}
+.wa-float:hover{background:var(--off-white);transform:translateY(-3px)}
+ 
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+ 
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-right{display:none}
+  .hero-left{padding:8rem 6vw 5rem}
+  .about-grid,.hours-grid,.location-grid,.booking-inner{grid-template-columns:1fr;gap:3rem}
+  .stats-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .about-num{display:none}
+  nav{padding:1.5rem 5vw}
+}
+</style>
+</head>
+<body>
+ 
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
+ 
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-word">
+    <span>B</span><span>L</span><span>E</span><span>S</span><span>S</span><span>E</span><span>D</span>
+  </div>
+  <div class="loader-sub">Barbershop · Matão SP</div>
+  <div class="loader-progress"></div>
+</div>
+ 
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Blessed</div>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#horarios">Horários</a></li>
+    <li><a href="#localizacao">Localização</a></li>
+  </ul>
+  <a href="https://agendaservico.com/blessedbarbershop" class="nav-cta" target="_blank">Agendar</a>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-left">
+    <div class="hero-tag">Matão, SP · Est. 2024</div>
+    <h1 class="hero-title">
+      <span class="hero-script">Blessed</span>
+      <span class="stroke">BAR</span><br>
+      <span>BER</span><br>
+      <span class="stroke">SHOP</span>
+    </h1>
+    <p class="hero-body">Sua melhor versão começa aqui. Atendimento com hora marcada, sem fila, sem espera.</p>
+    <div class="hero-btns">
+      <a href="https://agendaservico.com/blessedbarbershop" class="btn-fill" target="_blank">📅 Agendar pelo App</a>
+      <a href="#servicos" class="btn-ghost">Ver Serviços</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-img"></div>
+    <div class="hero-right-overlay"></div>
+    <div class="hero-counter">
+      <div class="counter-num">329</div>
+      <div class="counter-label">seguidores no Instagram</div>
+    </div>
+  </div>
+</section>
+ 
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <div class="marquee-item accent">Blessed Barbershop</div>
+    <div class="marquee-item">Corte de Cabelo</div>
+    <div class="marquee-item">Corte de Barba</div>
+    <div class="marquee-item accent">Hora Marcada</div>
+    <div class="marquee-item">Matão SP</div>
+    <div class="marquee-item">Sua Melhor Versão</div>
+    <div class="marquee-item accent">Blessed Barbershop</div>
+    <div class="marquee-item">Corte de Cabelo</div>
+    <div class="marquee-item">Corte de Barba</div>
+    <div class="marquee-item accent">Hora Marcada</div>
+    <div class="marquee-item">Matão SP</div>
+    <div class="marquee-item">Sua Melhor Versão</div>
+  </div>
+</div>
+ 
+<!-- SOBRE -->
+<section class="section" id="sobre">
+  <div class="section-max">
+    <div class="about-grid">
+      <div class="about-img-wrap reveal-left">
+        <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80" alt="Blessed Barbershop" class="about-img">
+        <div class="about-lines"></div>
+        <div class="about-num">B</div>
+      </div>
+      <div class="reveal">
+        <div class="tag">Nossa essência</div>
+        <h2 class="section-title">SUA<br>MELHOR<br><span class="stroke">VERSÃO</span></h2>
+        <p class="about-text" style="font-size:1rem;font-weight:300;line-height:2.2;color:var(--mid);margin-bottom:1.5rem">A Blessed Barbershop nasceu com um propósito simples e poderoso: fazer você sair melhor do que entrou. Cada corte é feito com atenção, técnica e cuidado com a sua aparência.</p>
+        <p style="font-size:1rem;font-weight:300;line-height:2.2;color:var(--mid)">Com atendimento por hora marcada, você agenda pelo app e chega na hora certa — sem espera, sem estresse. Só você e o seu estilo.</p>
+        <div class="about-pills">
+          <div class="pill">✂ Corte de Cabelo</div>
+          <div class="pill">🪒 Corte de Barba</div>
+          <div class="pill">📱 Agendamento pelo App</div>
+          <div class="pill">⏰ Hora Marcada</div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-grid reveal">
+      <div class="stat-box">
+        <div class="stat-num">329<span style="font-size:2rem;opacity:0.3">+</span></div>
+        <div class="stat-label">Seguidores no Instagram</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">100<span style="font-size:2rem;opacity:0.3">%</span></div>
+        <div class="stat-label">Hora marcada garantida</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">0<span style="font-size:2rem;opacity:0.3">h</span></div>
+        <div class="stat-label">De espera com agendamento</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- SERVIÇOS -->
+<section class="section services-dark" id="servicos">
+  <div class="section-max">
+    <div class="tag reveal">O que oferecemos</div>
+    <h2 class="section-title reveal">SERVIÇOS<br><span class="stroke">PREMIUM</span></h2>
+    <div class="services-list reveal">
+      <div class="service-row">
+        <div class="s-index">01</div>
+        <div>
+          <div class="s-name">Corte de Cabelo</div>
+          <div class="s-desc">Clássico, moderno ou degradê — no seu estilo</div>
+        </div>
+        <div class="s-arrow">→</div>
+      </div>
+      <div class="service-row">
+        <div class="s-index">02</div>
+        <div>
+          <div class="s-name">Corte de Barba</div>
+          <div class="s-desc">Delineada, aparada e modelada com precisão</div>
+        </div>
+        <div class="s-arrow">→</div>
+      </div>
+      <div class="service-row">
+        <div class="s-index">03</div>
+        <div>
+          <div class="s-name">Cabelo + Barba</div>
+          <div class="s-desc">O combo completo para sair 100%</div>
+        </div>
+        <div class="s-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- BOOKING -->
+<div class="booking-section" id="agendar">
+  <div class="booking-inner">
+    <div class="reveal">
+      <h2 class="booking-title">AGENDE<br><span class="gray">SEU</span><br>HORÁRIO</h2>
+    </div>
+    <div class="reveal">
+      <p class="booking-text" style="font-size:1rem;font-weight:300;line-height:2;color:rgba(0,0,0,0.5);margin-bottom:2rem">Simples, rápido e sem complicação. Clique no botão abaixo, escolha seu horário pelo app e apareça na hora certa. Sem fila, sem espera.</p>
+      <a href="https://agendaservico.com/blessedbarbershop" class="btn-black" target="_blank">📅 Agendar pelo App</a>
+      <a href="https://api.whatsapp.com/send?phone=5516996172304&text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20na%20Blessed%20Barbershop." class="booking-link" target="_blank">ou agendar pelo WhatsApp →</a>
+    </div>
+  </div>
+</div>
+ 
+<!-- HORÁRIOS -->
+<section class="section" id="horarios">
+  <div class="section-max">
+    <div class="tag reveal">Quando atendemos</div>
+    <h2 class="section-title reveal">HORÁRIOS</h2>
+    <div class="hours-grid">
+      <div class="reveal">
+        <div class="status-pill" id="status-pill">
+          <div class="status-dot" id="s-dot"></div>
+          <span id="s-text">Verificando...</span>
+        </div>
+        <div class="hour-item" id="h-seg-sex">
+          <div class="h-day">Segunda — Sexta</div>
+          <div class="h-time">09:00 — 20:00</div>
+        </div>
+        <div class="hour-item" id="h-sab">
+          <div class="h-day">Sábado</div>
+          <div class="h-time">08:00 — 19:00</div>
+        </div>
+        <div class="hour-item">
+          <div class="h-day">Domingo</div>
+          <div class="h-closed">Fechado</div>
+        </div>
+      </div>
+      <div class="reveal" style="text-align:center">
+        <div class="live-time" id="live-time">00:00</div>
+        <p style="font-size:0.7rem;letter-spacing:5px;text-transform:uppercase;color:rgba(245,245,240,0.2)">Horário atual</p>
+        <br><br>
+        <a href="https://agendaservico.com/blessedbarbershop" class="btn-fill" target="_blank" style="display:inline-block">Ver disponibilidade →</a>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- LOCALIZAÇÃO -->
+<section class="section services-dark" id="localizacao">
+  <div class="section-max">
+    <div class="tag reveal">Onde estamos</div>
+    <h2 class="section-title reveal">VENHA<br><span class="stroke">NOS VER</span></h2>
+    <div class="location-grid">
+      <div class="contact-list reveal">
+        <div class="contact-item">
+          <div class="c-label">Endereço</div>
+          <div class="c-val">Alameda da Saudade, 253<br>Jardim Pereira — Matão, SP<br>CEP 15990-842</div>
+        </div>
+        <div class="contact-item">
+          <div class="c-label">WhatsApp</div>
+          <div class="c-val">(16) 99617-2304</div>
+        </div>
+        <div class="contact-item">
+          <div class="c-label">Agendamento Online</div>
+          <div class="c-val">agendaservico.com/blessedbarbershop</div>
+        </div>
+        <div class="contact-item">
+          <div class="c-label">Instagram</div>
+          <div class="c-val">@blessedbarbershop016</div>
+        </div>
+        <div style="display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap">
+          <a href="https://agendaservico.com/blessedbarbershop" class="btn-fill" target="_blank">📅 Agendar</a>
+          <a href="https://api.whatsapp.com/send?phone=5516996172304&text=Olá!%20Gostaria%20de%20agendar%20na%20Blessed%20Barbershop." class="btn-ghost" target="_blank">WhatsApp</a>
+        </div>
+      </div>
+      <div class="map-box reveal">
+        <iframe src="https://maps.google.com/maps?q=Alameda+da+Saudade,+253,+Jardim+Pereira,+Matão+SP&output=embed" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">BLESSED<span>Barbershop</span></div>
+    <ul class="footer-nav">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#horarios">Horários</a></li>
+      <li><a href="#localizacao">Localização</a></li>
+      <li><a href="https://agendaservico.com/blessedbarbershop" target="_blank">Agendar</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Blessed Barbershop · Matão, SP · Todos os direitos reservados</div>
+    <div class="footer-copy">Alameda da Saudade, 253 · Jardim Pereira</div>
+  </div>
+</footer>
+ 
+<!-- WA FLOAT -->
+<a href="https://api.whatsapp.com/send?phone=5516996172304&text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20na%20Blessed%20Barbershop." class="wa-float" target="_blank">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Falar no WhatsApp
+</a>
+ 
+<script>
+// LOADER
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('gone')},2200)});
+ 
+// CURSOR
+const cur=document.getElementById('cursor'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.service-row,.pill,.stat-box').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.classList.add('big');ring.style.width='60px';ring.style.height='60px'});
+  el.addEventListener('mouseleave',()=>{cur.classList.remove('big');ring.style.width='36px';ring.style.height='36px'});
+});
+ 
+// NAV
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>80)});
+ 
+// SCROLL REVEAL
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('visible');obs.unobserve(el.target)}})},{threshold:0.1});
+document.querySelectorAll('.reveal,.reveal-left').forEach(el=>obs.observe(el));
+ 
+// LIVE TIME
+function updateTime(){
+  const n=new Date();
+  const h=String(n.getHours()).padStart(2,'0');
+  const m=String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('live-time').textContent=h+':'+m;
+}
+updateTime();setInterval(updateTime,1000);
+ 
+// STATUS
+function checkStatus(){
+  const n=new Date();
+  const d=n.getDay(),t=n.getHours()*60+n.getMinutes();
+  let open=false;
+  if(d>=1&&d<=5&&t>=540&&t<1200)open=true;
+  if(d===6&&t>=480&&t<1140)open=true;
+  const pill=document.getElementById('status-pill');
+  const txt=document.getElementById('s-text');
+  txt.textContent=open?'Aberto agora':'Fechado no momento';
+  pill.style.borderColor=open?'rgba(245,245,240,0.3)':'rgba(245,245,240,0.06)';
+  if(d>=1&&d<=5)document.getElementById('h-seg-sex').classList.add('today');
+  if(d===6)document.getElementById('h-sab').classList.add('today');
+}
+checkStatus();
+ 
+// PARALLAX HERO
+window.addEventListener('scroll',()=>{
+  const img=document.querySelector('.hero-right-img');
+  if(img)img.style.transform=`scale(1.1) translateY(${window.scrollY*0.05}px)`;
+});
+</script>
+</body>
+</html>
